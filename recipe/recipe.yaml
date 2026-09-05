@@ -23,10 +23,10 @@ build:
 
 requirements:
   host:
-    - python >=3.6,<3.11
+    - python ${{ python_min }}.*
     - pip
   run:
-    - python >=3.6,<3.11
+    - python >=${{ python_min }}
     - click >=8.0.0
     - click-shell
     - click-help-colors
@@ -65,7 +65,9 @@ tests:
       imports:
         - imaginairy
       pip_check: true
-      python_version: ${{ python_min }}.*
+      python_version:
+        - ${{ python_min }}
+        - "*"
   - requirements:
       run:
         - pip
