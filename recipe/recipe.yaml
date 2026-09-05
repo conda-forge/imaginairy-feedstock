@@ -1,21 +1,25 @@
-{% set name = "imaginairy" %}
-{% set version = "13.2.0" %}
+schema_version: 1
+
+context:
+  name: imaginairy
+  version: "13.2.0"
 
 package:
-  name: {{ name|lower }}
-  version: {{ version }}
+  name: ${{ name|lower }}
+  version: ${{ version }}
 
 source:
-  url: https://github.com/brycedrennan/imaginAIry/archive/{{ version }}.tar.gz
+  url: https://github.com/brycedrennan/imaginAIry/archive/${{ version }}.tar.gz
   sha256: 133764733d1669d10fd9dbfab834266826a710e78f4a65533c0318d150dd4b1e
 
 build:
+  number: 1
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
-  number: 0
-  entry_points:
-    - imagine = imaginairy.cli.main:imagine_cmd
-    - aimg = imaginairy.cli.main:aimg
+  script: ${{ PYTHON }} -m pip install . -vv
+  python:
+    entry_points:
+      - imagine = imaginairy.cli.main:imagine_cmd
+      - aimg = imaginairy.cli.main:aimg
 
 requirements:
   host:
@@ -56,26 +60,28 @@ requirements:
     - uvicorn
     - scipy <1.11
 
-test:
-  imports:
-    - imaginairy
-  requires:
-    - pip
-  commands:
-    - pip check
-    - imagine --help
-    - aimg --help
+tests:
+  - python:
+      imports:
+        - imaginairy
+      pip_check: true
+      python_version: ${{ python_min }}.*
+  - requirements:
+      run:
+        - pip
+    script:
+      - imagine --help
+      - aimg --help
 
 about:
-  home: https://github.com/brycedrennan/imaginAIry
   summary: AI imagined images. Pythonic generation of stable diffusion images.
   description: |
     AI imagined images. Pythonic generation of stable diffusion images.
   license: MIT
-  license_family: MIT
   license_file: LICENSE
-  doc_url: https://github.com/brycedrennan/imaginAIry
-  dev_url: https://github.com/brycedrennan/imaginAIry
+  homepage: https://github.com/brycedrennan/imaginAIry
+  repository: https://github.com/brycedrennan/imaginAIry
+  documentation: https://github.com/brycedrennan/imaginAIry
 
 extra:
   recipe-maintainers:
